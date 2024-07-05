@@ -4,5 +4,10 @@ body {
   font-family: "Fraunces", monospace;
   background: #C76B0F;
   font-size: 1.5em;
+  img.emojione {  
+   // Override any img styles to ensure Emojis are displayed inline
+   margin: 0px !important;
+   display: inline !important;
+  }
   
 }
