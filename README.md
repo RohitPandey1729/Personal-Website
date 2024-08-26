@@ -1,15 +1,4 @@
-# vCard - Personal portfolio
+This is my personal website that houses some of my achievements as well as a video of a rocket that I lauched. 
 
-## Run this website
+![image](https://github.com/user-attachments/assets/b0a3c2e9-7223-4cfb-b3be-c6c190aceb4a)
 
-Hit **Run** up there, or just hit `Cmd + ENTER`!
-
-You can customize it. Start from `index.html`.
-
-## Author & License
-
-This template has been developed by [@codewithsadee](https://www.twitter.com/codewithsadee). If you want to contact the author, you can reach out on [Twitter](https://www.twitter.com/codewithsadee). 
-
-Donations: [Patreon](https://patreon.com/codewithsadee).
-
-License: MIT (see LICENSE file).
