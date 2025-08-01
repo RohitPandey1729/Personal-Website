@@ -120,6 +120,21 @@
       <section class="hero" id="hero">
         <h1>Rohit Pandey</h1>
         <p>14-year-old high school student passionate about coding, rocketry, and innovation</p>
+        
+        <!-- Big Center Button -->
+        <div class="center-button-container">
+          <button class="big-center-button" onclick="scrollToProjects()">
+            <div class="button-content">
+              <div class="button-icon">🚀</div>
+              <div class="button-text">
+                <span class="button-main">Explore My Universe</span>
+                <span class="button-sub">Discover Projects & Adventures</span>
+              </div>
+            </div>
+            <div class="button-glow"></div>
+          </button>
+        </div>
+        
         <div class="social-links">
           <a href="https://github.com/RohitPandey1729">My GitHub</a>
         </div>
@@ -442,6 +457,33 @@
         musicToggle.click(); // Auto-start music with the countdown
       }
     }, 2000); // Start music during countdown
+
+    // Big Center Button Functionality
+    function scrollToProjects() {
+      const projectsSection = document.querySelector('#projects');
+      if (projectsSection) {
+        projectsSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else {
+        // If no projects section, scroll to about section
+        const aboutSection = document.querySelector('#about');
+        if (aboutSection) {
+          aboutSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+      
+      // Add a little visual feedback
+      const button = document.querySelector('.big-center-button');
+      button.style.transform = 'translateY(-4px) scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 150);
+    }
   </script>
 </body>
 </html>
