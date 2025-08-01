@@ -1228,3 +1228,90 @@ header h1 {
   100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
 }
 
+/* Secret Button Styles */
+.secret-button-container {
+  position: relative;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.secret-button {
+  background: rgba(255, 107, 53, 0.1);
+  border: 2px solid rgba(255, 107, 53, 0.3);
+  color: rgba(255, 107, 53, 0.6);
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px);
+  opacity: 0.3;
+  transform: scale(0.9);
+  position: relative;
+  overflow: hidden;
+}
+
+.secret-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.secret-button:hover::before {
+  left: 100%;
+}
+
+.secret-button:hover {
+  background: rgba(255, 107, 53, 0.2);
+  border-color: rgba(255, 107, 53, 0.6);
+  color: rgba(255, 107, 53, 0.9);
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+}
+
+.secret-icon {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  animation: secretPulse 2s ease-in-out infinite;
+}
+
+@keyframes secretPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.secret-text {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Make it more discoverable on hover of the hero section */
+.hero:hover .secret-button {
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+.hero:hover .secret-button:hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .secret-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+  }
+  
+  .secret-icon {
+    font-size: 1rem;
+  }
+}
+
