@@ -15,14 +15,14 @@ body {
   position: relative;
 }
 
-/* Rocket Intro Animation */
+/* Rocket Intro Animation - Enhanced */
 .rocket-intro {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f3460 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #0f3460 50%, #533483 75%, #0a0a0a 100%);
   z-index: 10000;
   display: flex;
   align-items: center;
@@ -47,28 +47,51 @@ body {
     radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
     radial-gradient(1px 1px at 90px 40px, #fff, transparent),
     radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+    radial-gradient(2px 2px at 160px 30px, #ddd, transparent),
+    radial-gradient(1px 1px at 200px 50px, #fff, transparent),
+    radial-gradient(2px 2px at 250px 20px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 300px 80px, #fff, transparent),
+    radial-gradient(2px 2px at 350px 40px, rgba(255,255,255,0.5), transparent);
   background-repeat: repeat;
-  background-size: 200px 100px;
-  animation: starField 20s linear infinite;
+  background-size: 400px 200px;
+  animation: starField 25s linear infinite;
 }
 
 @keyframes starField {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-100px); }
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-200px) rotate(5deg); }
 }
 
 .earth {
   position: absolute;
-  bottom: -100px;
+  bottom: -150px;
   left: 50%;
   transform: translateX(-50%);
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #4a90e2, #357abd, #2c5aa0);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #4a90e2 0%, #357abd 30%, #2c5aa0 60%, #1e3a5f 100%);
   border-radius: 50%;
-  box-shadow: 0 0 50px rgba(74, 144, 226, 0.5);
-  animation: earthRotate 30s linear infinite;
+  box-shadow: 
+    0 0 80px rgba(74, 144, 226, 0.6),
+    inset 0 0 50px rgba(255, 255, 255, 0.1);
+  animation: earthRotate 40s linear infinite;
+}
+
+.earth::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  height: 30%;
+  background: radial-gradient(ellipse, rgba(46, 204, 113, 0.3), transparent);
+  border-radius: 50%;
+  animation: earthGlow 8s ease-in-out infinite;
+}
+
+@keyframes earthGlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
 }
 
 @keyframes earthRotate {
@@ -78,7 +101,7 @@ body {
 
 .rocket-container {
   position: absolute;
-  bottom: 150px;
+  bottom: 200px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -86,13 +109,15 @@ body {
 
 .rocket {
   position: relative;
-  width: 60px;
-  height: 200px;
-  transition: all 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 80px;
+  height: 280px;
+  transition: all 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: drop-shadow(0 0 20px rgba(255, 107, 53, 0.5));
 }
 
 .rocket.launch {
-  transform: translateY(-100vh) rotate(-15deg);
+  transform: translateY(-120vh) rotate(-25deg) scale(0.8);
+  filter: drop-shadow(0 0 50px rgba(255, 107, 53, 0.8));
 }
 
 .rocket-body {
@@ -108,106 +133,160 @@ body {
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 30px solid transparent;
-  border-right: 30px solid transparent;
-  border-bottom: 60px solid #e74c3c;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 80px solid #e74c3c;
+  filter: drop-shadow(0 0 10px rgba(231, 76, 60, 0.5));
+}
+
+.rocket-nose::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 50px solid #c0392b;
 }
 
 .rocket-main {
   position: absolute;
-  top: 60px;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 160px;
+  background: linear-gradient(90deg, #e74c3c 0%, #c0392b 50%, #a93226 100%);
+  border-radius: 30px;
+  box-shadow: 
+    inset 0 0 20px rgba(255, 255, 255, 0.1),
+    0 0 15px rgba(231, 76, 60, 0.3);
+}
+
+.rocket-main::before {
+  content: '';
+  position: absolute;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
   height: 120px;
-  background: linear-gradient(90deg, #e74c3c, #c0392b);
+  background: linear-gradient(90deg, #fff 0%, #f8f9fa 100%);
   border-radius: 20px;
+  opacity: 0.1;
 }
 
 .rocket-fins {
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 40px;
+  width: 120px;
+  height: 60px;
 }
 
 .fin {
   position: absolute;
-  width: 20px;
-  height: 30px;
-  background: #95a5a6;
-  border-radius: 10px;
+  width: 30px;
+  height: 50px;
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(149, 165, 166, 0.3);
 }
 
-.fin-1 { transform: rotate(-45deg) translateX(-30px); }
-.fin-2 { transform: rotate(45deg) translateX(30px); }
-.fin-3 { transform: rotate(-135deg) translateX(-30px); }
-.fin-4 { transform: rotate(135deg) translateX(30px); }
+.fin-1 { transform: rotate(-45deg) translateX(-45px); }
+.fin-2 { transform: rotate(45deg) translateX(45px); }
+.fin-3 { transform: rotate(-135deg) translateX(-45px); }
+.fin-4 { transform: rotate(135deg) translateX(45px); }
 
 .rocket-engine {
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 40px;
-}
-
-.engine-flame {
   position: absolute;
   bottom: -30px;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
-  height: 40px;
-  background: linear-gradient(to bottom, #ff6b35, #f7931e, #e74c3c);
-  border-radius: 10px;
-  animation: flameFlicker 0.1s ease-in-out infinite;
+  width: 80px;
+  height: 60px;
+}
+
+.engine-flame {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 60px;
+  background: linear-gradient(to bottom, #ff6b35 0%, #f7931e 30%, #e74c3c 60%, #c0392b 100%);
+  border-radius: 15px;
+  animation: flameFlicker 0.08s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
 }
 
 .engine-flame-2 {
-  left: calc(50% - 15px);
-  width: 15px;
-  height: 30px;
-  animation-delay: 0.05s;
+  left: calc(50% - 20px);
+  width: 20px;
+  height: 40px;
+  animation-delay: 0.04s;
+  background: linear-gradient(to bottom, #f7931e 0%, #e67e22 50%, #d35400 100%);
 }
 
 .engine-flame-3 {
-  left: calc(50% + 15px);
-  width: 15px;
-  height: 30px;
-  animation-delay: 0.1s;
+  left: calc(50% + 20px);
+  width: 20px;
+  height: 40px;
+  animation-delay: 0.08s;
+  background: linear-gradient(to bottom, #e74c3c 0%, #c0392b 50%, #a93226 100%);
 }
 
 @keyframes flameFlicker {
   0%, 100% { 
-    height: 40px;
+    height: 60px;
     opacity: 1;
+    transform: translateX(-50%) scaleY(1);
+  }
+  25% { 
+    height: 55px;
+    opacity: 0.9;
+    transform: translateX(-50%) scaleY(0.95);
   }
   50% { 
-    height: 35px;
+    height: 50px;
     opacity: 0.8;
+    transform: translateX(-50%) scaleY(0.9);
+  }
+  75% { 
+    height: 55px;
+    opacity: 0.9;
+    transform: translateX(-50%) scaleY(0.95);
   }
 }
 
 .rocket-trail {
   position: absolute;
-  bottom: -60px;
+  bottom: -100px;
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
-  height: 100px;
-  background: linear-gradient(to top, transparent, rgba(255, 107, 53, 0.8));
-  animation: trailFade 0.5s ease-in-out infinite;
+  width: 6px;
+  height: 150px;
+  background: linear-gradient(to top, transparent 0%, rgba(255, 107, 53, 0.3) 30%, rgba(255, 107, 53, 0.8) 70%, rgba(255, 107, 53, 1) 100%);
+  animation: trailFade 0.3s ease-in-out infinite;
+  border-radius: 3px;
 }
 
 @keyframes trailFade {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+  0%, 100% { 
+    opacity: 0.4;
+    height: 150px;
+  }
+  50% { 
+    opacity: 1;
+    height: 140px;
+  }
 }
 
+/* Enhanced Intro Text */
 .intro-text {
   position: absolute;
   top: 50%;
@@ -215,72 +294,171 @@ body {
   transform: translate(-50%, -50%);
   text-align: center;
   z-index: 20;
-  transition: opacity 1s ease;
+  transition: all 1.5s ease;
 }
 
 .intro-text.fade-out {
   opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
 }
 
 .intro-title {
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 900;
-  background: linear-gradient(45deg, #ff6b35, #f7931e, #e74c3c);
+  background: linear-gradient(45deg, #ff6b35 0%, #f7931e 25%, #e74c3c 50%, #9b59b6 75%, #3498db 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
-  margin-bottom: 1rem;
-  animation: titleGlow 2s ease-in-out infinite;
+  text-shadow: 0 0 40px rgba(255, 107, 53, 0.8);
+  margin-bottom: 1.5rem;
+  animation: titleGlow 3s ease-in-out infinite;
+  letter-spacing: 2px;
 }
 
 @keyframes titleGlow {
-  0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 107, 53, 0.8)); }
-  50% { filter: drop-shadow(0 0 40px rgba(255, 107, 53, 1)); }
+  0%, 100% { 
+    filter: drop-shadow(0 0 30px rgba(255, 107, 53, 0.8));
+    transform: scale(1);
+  }
+  50% { 
+    filter: drop-shadow(0 0 60px rgba(255, 107, 53, 1));
+    transform: scale(1.05);
+  }
 }
 
 .intro-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #fff;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-  animation: subtitlePulse 1.5s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  animation: subtitlePulse 2s ease-in-out infinite;
+  font-weight: 300;
+  letter-spacing: 1px;
 }
 
 @keyframes subtitlePulse {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.05); }
+  0%, 100% { 
+    opacity: 0.8; 
+    transform: scale(1);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.08);
+    text-shadow: 0 0 30px rgba(255, 255, 255, 1);
+  }
 }
 
+/* Enhanced Countdown */
 .countdown {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 30;
-  transition: opacity 1s ease;
+  transition: all 1s ease;
 }
 
 .countdown.fade-out {
   opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
 }
 
 .countdown-number {
-  font-size: 8rem;
+  font-size: 10rem;
   font-weight: 900;
   color: #ff6b35;
-  text-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
-  animation: countdownPulse 1s ease-in-out infinite;
+  text-shadow: 
+    0 0 40px rgba(255, 107, 53, 0.8),
+    0 0 80px rgba(255, 107, 53, 0.4);
+  animation: countdownPulse 1.2s ease-in-out infinite;
+  letter-spacing: 5px;
 }
 
 @keyframes countdownPulse {
   0%, 100% { 
     transform: scale(1);
-    text-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
+    text-shadow: 
+      0 0 40px rgba(255, 107, 53, 0.8),
+      0 0 80px rgba(255, 107, 53, 0.4);
   }
   50% { 
-    transform: scale(1.2);
-    text-shadow: 0 0 50px rgba(255, 107, 53, 1);
+    transform: scale(1.3);
+    text-shadow: 
+      0 0 60px rgba(255, 107, 53, 1),
+      0 0 120px rgba(255, 107, 53, 0.6);
   }
+}
+
+/* Launch Pad Effect */
+.rocket-container::before {
+  content: '';
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 20px;
+  background: linear-gradient(90deg, #34495e 0%, #2c3e50 50%, #34495e 100%);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(52, 73, 94, 0.5);
+}
+
+.rocket-container::after {
+  content: '';
+  position: absolute;
+  bottom: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 40px;
+  background: linear-gradient(90deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(52, 73, 94, 0.3);
+}
+
+/* Smoke Effect */
+.rocket-container .smoke {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 60px;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  animation: smokeRise 2s ease-out infinite;
+  opacity: 0;
+}
+
+@keyframes smokeRise {
+  0% { 
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateX(-50%) scale(1.5) translateY(-20px);
+  }
+}
+
+/* Enhanced Background Effects */
+.intro-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+  animation: backgroundPulse 4s ease-in-out infinite;
+}
+
+@keyframes backgroundPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 /* Main Website Section */
@@ -920,15 +1098,33 @@ header h1 {
 /* Responsive Design */
 @media (max-width: 768px) {
   .intro-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    letter-spacing: 1px;
   }
   
   .countdown-number {
-    font-size: 4rem;
+    font-size: 6rem;
+    letter-spacing: 2px;
   }
   
-  .hero h1 {
-    font-size: 2.5rem;
+  .intro-subtitle {
+    font-size: 1.4rem;
+  }
+  
+  .rocket {
+    width: 60px;
+    height: 200px;
+  }
+  
+  .rocket-nose {
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 60px solid #e74c3c;
+  }
+  
+  .rocket-main {
+    width: 40px;
+    height: 120px;
   }
   
   nav {

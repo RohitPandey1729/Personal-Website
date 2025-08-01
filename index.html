@@ -35,6 +35,7 @@
         </div>
         <div class="rocket-trail"></div>
       </div>
+      <div class="smoke"></div>
     </div>
     
     <div class="intro-text">
@@ -206,39 +207,70 @@
   </div>
 
   <script>
-    // Rocket Intro Animation
+    // Enhanced Rocket Intro Animation
     let countdown = 3;
     const countdownElement = document.getElementById('countdown');
     const rocketIntro = document.getElementById('rocketIntro');
     const mainWebsite = document.getElementById('mainWebsite');
+    const rocket = document.querySelector('.rocket');
+    const smoke = document.querySelector('.smoke');
     
     // Hide main website initially
     mainWebsite.style.display = 'none';
     
-    // Countdown and rocket launch sequence
+    // Enhanced countdown and rocket launch sequence
     const countdownInterval = setInterval(() => {
       countdown--;
       countdownElement.textContent = countdown;
       
+      // Add dramatic effect for each countdown number
+      countdownElement.style.animation = 'none';
+      countdownElement.offsetHeight; // Trigger reflow
+      countdownElement.style.animation = 'countdownPulse 0.5s ease-in-out';
+      
       if (countdown <= 0) {
         clearInterval(countdownInterval);
         countdownElement.textContent = 'LAUNCH!';
+        countdownElement.style.color = '#ff6b35';
+        countdownElement.style.textShadow = '0 0 60px rgba(255, 107, 53, 1)';
         
-        // Start rocket animation
+        // Start enhanced rocket animation
         setTimeout(() => {
-          document.querySelector('.rocket').classList.add('launch');
-          document.querySelector('.intro-text').classList.add('fade-out');
-          document.querySelector('.countdown').classList.add('fade-out');
+          // Add smoke effect
+          smoke.style.opacity = '1';
           
-          // After rocket flies off screen, show main website
+          // Start rocket launch with enhanced effects
           setTimeout(() => {
-            rocketIntro.style.display = 'none';
-            mainWebsite.style.display = 'block';
-            mainWebsite.classList.add('fade-in');
-          }, 3000);
+            rocket.classList.add('launch');
+            
+            // Add dramatic text fade
+            document.querySelector('.intro-text').classList.add('fade-out');
+            document.querySelector('.countdown').classList.add('fade-out');
+            
+            // Add screen shake effect
+            rocketIntro.style.animation = 'screenShake 0.5s ease-in-out';
+            
+            // After rocket flies off screen, show main website
+            setTimeout(() => {
+              rocketIntro.style.display = 'none';
+              mainWebsite.style.display = 'block';
+              mainWebsite.classList.add('fade-in');
+            }, 4000);
+          }, 500);
         }, 1000);
       }
     }, 1000);
+
+    // Add screen shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes screenShake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
 
     // Smooth scrolling for navigation links
     document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
