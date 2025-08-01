@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚀 3D Rocket Explorer - Rohit Pandey</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    .explorer-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #0f3460 50%, #533483 75%, #0a0a0a 100%);
+      display: flex;
+      flex-direction: column;
+      z-index: 10000;
+    }
+
+    .explorer-header {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 10001;
+    }
+
+    .explorer-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #ff6b35, #f7931e, #e74c3c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
+    }
+
+    .explorer-subtitle {
+      color: #fff;
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .controls-panel {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border: 2px solid rgba(255, 107, 53, 0.3);
+      color: #fff;
+      z-index: 10001;
+      max-width: 300px;
+    }
+
+    .controls-panel h3 {
+      color: #ff6b35;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .control-group {
+      margin-bottom: 1rem;
+    }
+
+    .control-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .control-button {
+      background: rgba(255, 107, 53, 0.2);
+      border: 2px solid rgba(255, 107, 53, 0.5);
+      color: #ff6b35;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.2rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .control-button:hover {
+      background: rgba(255, 107, 53, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    .control-button.active {
+      background: rgba(255, 107, 53, 0.6);
+      color: white;
+    }
+
+    .part-info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border: 2px solid rgba(255, 107, 53, 0.5);
+      color: #fff;
+      z-index: 10001;
+      max-width: 350px;
+      display: none;
+    }
+
+    .part-info h3 {
+      color: #ff6b35;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .part-info p {
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+
+    .part-info .function {
+      background: rgba(255, 107, 53, 0.1);
+      padding: 0.8rem;
+      border-radius: 8px;
+      border-left: 3px solid #ff6b35;
+      margin-top: 1rem;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 107, 53, 0.2);
+      border: 2px solid rgba(255, 107, 53, 0.5);
+      color: #ff6b35;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      z-index: 10001;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 107, 53, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    #rocketCanvas {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+
+    .instructions {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: #fff;
+      z-index: 10001;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1rem 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+
+    .instructions p {
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .explorer-title {
+        font-size: 2rem;
+      }
+      
+      .controls-panel {
+        max-width: 250px;
+        padding: 1rem;
+      }
+      
+      .part-info {
+        max-width: 280px;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="explorer-container">
+    <div class="explorer-header">
+      <h1 class="explorer-title">🚀 3D Rocket Explorer</h1>
+      <p class="explorer-subtitle">Click parts to learn what they do!</p>
+    </div>
+
+    <div class="controls-panel">
+      <h3>🎮 Controls</h3>
+      <div class="control-group">
+        <label>View Mode:</label>
+        <button class="control-button active" onclick="setViewMode('assembled')">Assembled</button>
+        <button class="control-button" onclick="setViewMode('exploded')">Exploded</button>
+        <button class="control-button" onclick="setViewMode('wireframe')">Wireframe</button>
+      </div>
+      <div class="control-group">
+        <label>Rotation:</label>
+        <button class="control-button" onclick="toggleRotation()">Auto Rotate</button>
+        <button class="control-button" onclick="resetView()">Reset View</button>
+      </div>
+      <div class="control-group">
+        <label>Parts:</label>
+        <button class="control-button" onclick="highlightPart('nose')">Nose Cone</button>
+        <button class="control-button" onclick="highlightPart('body')">Body Tube</button>
+        <button class="control-button" onclick="highlightPart('fins')">Fins</button>
+        <button class="control-button" onclick="highlightPart('engine')">Engine</button>
+        <button class="control-button" onclick="highlightPart('parachute')">Parachute</button>
+      </div>
+    </div>
+
+    <div class="part-info" id="partInfo">
+      <h3 id="partTitle">Rocket Part</h3>
+      <p id="partDescription">Click on a part to learn about it!</p>
+      <div class="function">
+        <strong>Function:</strong>
+        <p id="partFunction">Select a part to see its function.</p>
+      </div>
+    </div>
+
+    <button class="back-button" onclick="window.location.href='index.html'">← Back to Website</button>
+
+    <canvas id="rocketCanvas"></canvas>
+
+    <div class="instructions">
+      <p><strong>Mouse:</strong> Click and drag to rotate • Scroll to zoom</p>
+      <p><strong>Touch:</strong> Swipe to rotate • Pinch to zoom</p>
+    </div>
+  </div>
+
+  <script>
+    // Three.js setup
+    let scene, camera, renderer, rocket;
+    let isRotating = false;
+    let currentViewMode = 'assembled';
+    let highlightedPart = null;
+
+    // Rocket parts data
+    const rocketParts = {
+      nose: {
+        title: "Nose Cone",
+        description: "The aerodynamic tip of the rocket that reduces drag and provides stability during flight.",
+        function: "Streamlines the rocket's profile, reducing air resistance and improving overall performance. Different shapes (conical, ogive, parabolic) offer various aerodynamic characteristics."
+      },
+      body: {
+        title: "Body Tube",
+        description: "The main structural component that houses the rocket's internal systems and provides structural integrity.",
+        function: "Acts as the primary structure, contains the recovery system, and provides mounting points for other components. Made from lightweight materials like cardboard, fiberglass, or carbon fiber."
+      },
+      fins: {
+        title: "Stabilizing Fins",
+        description: "Aerodynamic surfaces that provide stability and control during the rocket's flight.",
+        function: "Create aerodynamic forces that keep the rocket flying straight. The number, size, and shape of fins affect stability and flight characteristics."
+      },
+      engine: {
+        title: "Rocket Engine",
+        description: "The propulsion system that generates thrust to launch the rocket into the air.",
+        function: "Burns propellant to create hot gases that exit through the nozzle, producing thrust according to Newton's Third Law. Different engines provide various thrust levels and burn times."
+      },
+      parachute: {
+        title: "Recovery System",
+        description: "The parachute system that safely returns the rocket to the ground after flight.",
+        function: "Deploys at apogee (highest point) to slow the rocket's descent, preventing damage on landing. Usually triggered by a timer or altitude sensor."
+      }
+    };
+
+    // Initialize the 3D scene
+    function init() {
+      // Scene setup
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0a0a);
+
+      // Camera setup
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 0, 5);
+
+      // Renderer setup
+      renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('rocketCanvas'), antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+      scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(10, 10, 5);
+      directionalLight.castShadow = true;
+      scene.add(directionalLight);
+
+      const pointLight = new THREE.PointLight(0xff6b35, 1, 100);
+      pointLight.position.set(0, 5, 5);
+      scene.add(pointLight);
+
+      // Create rocket
+      createRocket();
+
+      // Controls
+      setupControls();
+
+      // Animation loop
+      animate();
+    }
+
+    // Create the 3D rocket model
+    function createRocket() {
+      rocket = new THREE.Group();
+
+      // Nose cone
+      const noseGeometry = new THREE.ConeGeometry(0.3, 0.8, 8);
+      const noseMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0xe74c3c,
+        shininess: 100
+      });
+      const nose = new THREE.Mesh(noseGeometry, noseMaterial);
+      nose.position.y = 2.4;
+      nose.userData = { part: 'nose' };
+      nose.castShadow = true;
+      rocket.add(nose);
+
+      // Body tube
+      const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2, 8);
+      const bodyMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x3498db,
+        shininess: 50
+      });
+      const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+      body.position.y = 1.4;
+      body.userData = { part: 'body' };
+      body.castShadow = true;
+      rocket.add(body);
+
+      // Fins
+      const finGeometry = new THREE.BoxGeometry(0.1, 0.6, 0.8);
+      const finMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x95a5a6,
+        shininess: 30
+      });
+
+      for (let i = 0; i < 4; i++) {
+        const fin = new THREE.Mesh(finGeometry, finMaterial);
+        const angle = (i * Math.PI) / 2;
+        fin.position.set(
+          Math.cos(angle) * 0.4,
+          0.8,
+          Math.sin(angle) * 0.4
+        );
+        fin.rotation.y = angle;
+        fin.userData = { part: 'fins' };
+        fin.castShadow = true;
+        rocket.add(fin);
+      }
+
+      // Engine
+      const engineGeometry = new THREE.CylinderGeometry(0.25, 0.3, 0.6, 8);
+      const engineMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x2c3e50,
+        shininess: 80
+      });
+      const engine = new THREE.Mesh(engineGeometry, engineMaterial);
+      engine.position.y = 0.2;
+      engine.userData = { part: 'engine' };
+      engine.castShadow = true;
+      rocket.add(engine);
+
+      // Engine nozzle
+      const nozzleGeometry = new THREE.ConeGeometry(0.15, 0.3, 8);
+      const nozzleMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x7f8c8d,
+        shininess: 60
+      });
+      const nozzle = new THREE.Mesh(nozzleGeometry, nozzleMaterial);
+      nozzle.position.y = -0.15;
+      nozzle.rotation.x = Math.PI;
+      nozzle.userData = { part: 'engine' };
+      rocket.add(nozzle);
+
+      // Parachute (hidden inside body)
+      const parachuteGeometry = new THREE.SphereGeometry(0.2, 8, 6);
+      const parachuteMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0xe67e22,
+        transparent: true,
+        opacity: 0.8
+      });
+      const parachute = new THREE.Mesh(parachuteGeometry, parachuteMaterial);
+      parachute.position.y = 1.4;
+      parachute.userData = { part: 'parachute' };
+      rocket.add(parachute);
+
+      scene.add(rocket);
+
+      // Add click event listeners
+      addClickListeners();
+    }
+
+    // Add click event listeners to parts
+    function addClickListeners() {
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+
+      function onMouseClick(event) {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(rocket.children, true);
+
+        if (intersects.length > 0) {
+          const clickedPart = intersects[0].object.userData.part;
+          showPartInfo(clickedPart);
+        }
+      }
+
+      document.addEventListener('click', onMouseClick);
+    }
+
+    // Show part information
+    function showPartInfo(partName) {
+      const partInfo = rocketParts[partName];
+      if (partInfo) {
+        document.getElementById('partTitle').textContent = partInfo.title;
+        document.getElementById('partDescription').textContent = partInfo.description;
+        document.getElementById('partFunction').textContent = partInfo.function;
+        document.getElementById('partInfo').style.display = 'block';
+        
+        // Highlight the part
+        highlightPart(partName);
+      }
+    }
+
+    // Highlight a specific part
+    function highlightPart(partName) {
+      // Reset all parts to normal
+      rocket.children.forEach(child => {
+        if (child.material) {
+          child.material.emissive.setHex(0x000000);
+        }
+      });
+
+      // Highlight selected part
+      rocket.children.forEach(child => {
+        if (child.userData.part === partName) {
+          child.material.emissive.setHex(0xff6b35);
+        }
+      });
+
+      highlightedPart = partName;
+    }
+
+    // Set view mode
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      
+      // Update button states
+      document.querySelectorAll('.control-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // Apply view mode
+      switch(mode) {
+        case 'assembled':
+          rocket.children.forEach(child => {
+            child.visible = true;
+            if (child.userData.part === 'parachute') {
+              child.visible = false; // Hide parachute in assembled view
+            }
+          });
+          break;
+        case 'exploded':
+          rocket.children.forEach((child, index) => {
+            child.visible = true;
+            // Spread parts apart
+            const offset = index * 0.5;
+            child.position.y += offset;
+          });
+          break;
+        case 'wireframe':
+          rocket.children.forEach(child => {
+            if (child.material) {
+              child.material.wireframe = true;
+            }
+          });
+          break;
+      }
+    }
+
+    // Toggle rotation
+    function toggleRotation() {
+      isRotating = !isRotating;
+      event.target.classList.toggle('active');
+    }
+
+    // Reset view
+    function resetView() {
+      camera.position.set(0, 0, 5);
+      rocket.rotation.set(0, 0, 0);
+      
+      // Reset parts to assembled position
+      rocket.children.forEach((child, index) => {
+        child.position.y = child.userData.originalY || child.position.y;
+      });
+    }
+
+    // Setup controls
+    function setupControls() {
+      let isMouseDown = false;
+      let mouseX = 0;
+      let mouseY = 0;
+
+      document.addEventListener('mousedown', (e) => {
+        isMouseDown = true;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isMouseDown = false;
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (isMouseDown) {
+          const deltaX = e.clientX - mouseX;
+          const deltaY = e.clientY - mouseY;
+          
+          rocket.rotation.y += deltaX * 0.01;
+          rocket.rotation.x += deltaY * 0.01;
+          
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        }
+      });
+
+      // Zoom with scroll wheel
+      document.addEventListener('wheel', (e) => {
+        camera.position.z += e.deltaY * 0.01;
+        camera.position.z = Math.max(2, Math.min(10, camera.position.z));
+      });
+    }
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (isRotating) {
+        rocket.rotation.y += 0.01;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Initialize the scene
+    init();
+  </script>
+</body>
+</html> 
